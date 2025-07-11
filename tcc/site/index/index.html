@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /**MENU**/
+        .menu-container {
+            display: flex;
+            justify-content: center; /* Center the menu horizontally */
+            width: 100%; /* Make the container take up the full width */
+            margin-top: 55px;
+        }
+
+        .menu {
+            margin-top: 55px;
+            display: flex;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            border-radius: 1px;
+            overflow: hidden;
+            transition: width 0.3s ease-in-out;
+            width: 80px; /* Initial width of the search bar */
+            transform-origin: left; /* Set the transform origin to the left */
+            background-color: #000000;
+        }
+
+        .search-bar.active {
+            width: 200px; /* Width when the search bar is active */
+            background-color: black; /* Make the search bar black when active */
+        }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            display: none; /* Hide the input initially */
+            background-color: transparent;
+            color: white;
+        }
+
+        .search-bar.active input[type="text"] {
+            display: block; /* Show the input when the bar is active */
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1px;
+            cursor: pointer;
+            color: #555;
+            margin-left: 30px;
+        }
+
+        .menu-item a {
+    text-decoration: none; /* Remove o sublinhado do link */
+    color: inherit; /* Herda a cor do elemento pai (.menu-item) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Faz o link ocupar todo o espaço do menu-item */
+    height: 100%; /* Faz o link ocupar todo o espaço do menu-item */
+}
+
+
+        .menu-item i {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .menu-item span {
+            font-size: 0.8em;
+        }
+        
+       .fas-fa-search{
+           margin-right: 20px;
+
+        }
+
+        /** LETREIRO **/
+
+        .js-adbar-text-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #0a0a0a;
+            color: rgb(255, 0, 0);
+            padding: 10px 0;
+            box-sizing: border-box;
+            margin-top: 150px; /* Adds a top margin of 50 pixels */
+        }
+
+        .adbar-message {
+            display: inline-block;
+            padding: 0 10px;
+            animation: scrollText 30s linear infinite;
+        }
+
+        .adbar-message.mr-4 {
+            margin-right: 1.5rem;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+                
+        /** MAIS VENDIDOS **/
+        .most-sold-container {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .most-sold-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-carousel {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .product-grid {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            scroll-snap-type: x mandatory; /* Snap to each product */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            padding-bottom: 20px; /* Add padding to prevent content from being hidden */
+            scrollbar-width: none; /* Hide scrollbar on Firefox */
+        }
+
+        .product-grid::-webkit-scrollbar {
+            display: none; /* Hide scrollbar on Chrome, Safari, and Opera */
+        }
+
+        .product-card {
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            flex: 0 0 auto; /* Prevent items from shrinking */
+            width: 350px; /* Set a fixed width for each product */
+            height: 600px; /* Set a fixed height for each product */
+            scroll-snap-align: start; /* Snap to the start of each product */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .product-price {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .add-to-cart {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .add-to-cart:hover {
+            background-color: #cc0000;
+        }
+
+        .carousel-button {
+            background: none;
+            border: none;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .carousel-button.prev {
+            left: 10px;
+        }
+
+        .carousel-button.next {
+            right: 10px;
+        }
+
+        
+    </style>
+
+</head>
+<body style="background-color: black;">
+
+    <!---MENU-->
+    <div class="menu-container">
+        <div class="menu">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="">
+                <div class="menu-item" id="search-icon">
+                    <i class="fas fa-search"></i>
+                    <span>Pesquisar</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="historio.html">
+                <i class="fas fa-history"></i>
+                <span>Histórico</span></a>
+            </div>
+             <div class="menu-item">
+             <a href="longin.html"> 
+                  <i class="fas fa-user"></i>
+                <span>Perfil</span></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const searchBar = document.querySelector('.search-bar');
+        const searchInput = document.getElementById('search-input');
+        const searchIcon = document.getElementById('search-icon');
+
+        searchIcon.addEventListener('click', () => {
+            searchBar.classList.add('active');
+            searchInput.focus();
+            searchInput.setAttribute('placeholder', 'Pesquisar');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            searchBar.classList.remove('active');
+            searchInput.setAttribute('placeholder', '');
+        });
+    </script>
+
+
+    <!--- letreiro -->
+
+    <div class="js-adbar-text-container">
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+        <span class="adbar-message mr-4 ">
+
+        </span>
+        <span class="adbar-message mr-4 ">
+            ENVIAMOS NO MESMO DIA QUE VOCÊ FEZ O SEU PEDIDO
+        </span>
+    </div>
+
+      <!--- produtos mais vendidos -->
+      <div class="most-sold-container">
+        <h2 style="margin-right: 950px;">Mais Vendidos ☠</h2>
+        <div class="product-carousel">
+            <button class="carousel-button prev" aria-label="Previous">
+            </button>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <!-- Coloque a imagem do produto aqui -->
+                        <img src="camisas/cbf01.jpg" alt="Nome do Produto">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Nome do Produto</h3> <!-- Coloque o nome do produto aqui -->
+                        <p class="product-price">R$ 99,99</p> <!-- Coloque o preço do produto aqui -->
+                        <button class="add-to-cart">Adicionar ao Carrinho</button> <!-- Botão para adicionar ao carrinho -->
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <!-- Coloque a imagem do produto aqui -->
+                  <img  src="camisas/cpf01.jpg">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Nome do Produto</h3> <!-- Coloque o nome do produto aqui -->
+                        <p class="product-price">R$ 99,99</p> <!-- Coloque o preço do produto aqui -->
+                        <button class="add-to-cart">Adicionar ao Carrinho</button> <!-- Botão para adicionar ao carrinho -->
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <!-- Coloque a imagem do produto aqui -->
+                        <img src="camisas/ccpf01.jpg" alt="Nome do Produto">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Nome do Produto</h3> <!-- Coloque o nome do produto aqui -->
+                        <p class="product-price">R$ 99,99</p> <!-- Coloque o preço do produto aqui -->
+                        <button class="add-to-cart">Adicionar ao Carrinho</button> <!-- Botão para adicionar ao carrinho -->
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <!-- Coloque a imagem do produto aqui -->
+                        <img src="camisas/calça001.png" alt="Nome do Produto">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Nome do Produto</h3> <!-- Coloque o nome do produto aqui -->
+                        <p class="product-price">R$ 99,99</p> <!-- Coloque o preço do produto aqui -->
+                        <button class="add-to-cart">Adicionar ao Carrinho</button> <!-- Botão para adicionar ao carrinho -->
+                    </div>
+                </div>
+
+
+                </div>
+            </div>
+         
+        </div>
+    </div>
+
+    <!-- Product Category Selection -->
+    <div class="category-selection-container" style="margin-top: 20px; text-align: center;">
+        <h2 style="color: white;"> 🐉 Escolha a Categoria 🐉</h2>
+        <div class="category-buttons" style="display: flex; justify-content: center; gap: 10px;">
+            <button id="btn-camisas" style="background-color: #ff0000; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Camisas</button>
+            <button id="btn-blusas" style="background-color: #ff0000; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Blusas</button>
+            <button id="btn-calcas" style="background-color: #ff0000; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Calças</button>
+            <button id="btn-acessorios" style="background-color: #ff0000; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Acessórios</button>
+        </div>
+    </div>
+
+    <!-- Camisas -->
+    <div id="produtos-camisas" class="featured-products-container" style="background-color: #222; color: white; padding: 20px; margin-top: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Camisas em Destaque</h2>
+    <div class="product-carousel">
+        <div class="product-grid">
+            <!-- Camisa CBF 01 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="camisas/" alt="Camisa CBF 01">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Camisa CBF 01</h3>
+                    <p class="product-price">R$ 59,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Camisa CBF 02 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="camisas/cpf01" alt="Camisa CBF 02">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Camisa CBF 02</h3>
+                    <p class="product-price">R$ 69,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Camisa CBF 03 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="camisas/cbf03.jpg" alt="Camisa CBF 03">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Camisa CBF 03</h3>
+                    <p class="product-price">R$ 79,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blusas -->
+<div id="produtos-blusas" class="featured-products-container" style="background-color: #222; color: white; padding: 20px; margin-top: 20px; display:none;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Blusas em Destaque</h2>
+    <div class="product-carousel">
+        <div class="product-grid">
+            <!-- Blusa 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="blusas/blusa01.jpg" alt="Blusa Estilosa">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Blusa Estilosa</h3>
+                    <p class="product-price">R$ 69,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Blusa 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="blusas/blusa02.jpg" alt="Blusa Moletom">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Blusa Moletom</h3>
+                    <p class="product-price">R$ 89,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Blusa 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="blusas/blusa03.jpg" alt="Blusa Cropped">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Blusa Cropped</h3>
+                    <p class="product-price">R$ 59,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Blusa 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="blusas/blusa04.jpg" alt="Blusa Manga Longa">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Blusa Manga Longa</h3>
+                    <p class="product-price">R$ 79,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Calças -->
+<div id="produtos-calcas" class="featured-products-container" style="background-color: #222; color: white; padding: 20px; margin-top: 20px; display:none;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Calças em Destaque</h2>
+    <div class="product-carousel">
+        <div class="product-grid">
+            <!-- Calça 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="calcas/calca01.jpg" alt="Calça Moderna">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Calça Moderna</h3>
+                    <p class="product-price">R$ 89,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Calça 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="calcas/calca02.jpg" alt="Calça Jeans">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Calça Jeans</h3>
+                    <p class="product-price">R$ 99,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Calça 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="calcas/calca03.jpg" alt="Calça Jogger">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Calça Jogger</h3>
+                    <p class="product-price">R$ 109,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Calça 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="calcas/calca04.jpg" alt="Calça Cargo">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Calça Cargo</h3>
+                    <p class="product-price">R$ 119,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acessórios -->
+<div id="produtos-acessorios" class="featured-products-container" style="background-color: #222; color: white; padding: 20px; margin-top: 20px; display:none;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Acessórios em Destaque</h2>
+    <div class="product-carousel">
+        <div class="product-grid">
+            <!-- Acessório 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="acessorios/colar01.jpg" alt="Colar Dark">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Colar Dark</h3>
+                    <p class="product-price">R$ 29,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Acessório 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="acessorios/pulseira01.jpg" alt="Pulseira Rock">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Pulseira Rock</h3>
+                    <p class="product-price">R$ 19,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Acessório 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="acessorios/anel01.jpg" alt="Anel Caveira">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Anel Caveira</h3>
+                    <p class="product-price">R$ 24,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+            <!-- Acessório 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="acessorios/oculos01.jpg" alt="Óculos Escuro">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Óculos Escuro</h3>
+                    <p class="product-price">R$ 39,99</p>
+                    <button class="add-to-cart">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Função para mostrar a categoria escolhida e esconder as outras
+function mostrarCategoria(id) {
+    document.getElementById('produtos-camisas').style.display = 'none';
+    document.getElementById('produtos-blusas').style.display = 'none';
+    document.getElementById('produtos-calcas').style.display = 'none';
+    document.getElementById('produtos-acessorios').style.display = 'none';
+    document.getElementById(id).style.display = 'block';
+}
+
+document.getElementById('btn-camisas').onclick = function() { mostrarCategoria('produtos-camisas'); }
+document.getElementById('btn-blusas').onclick = function() { mostrarCategoria('produtos-blusas'); }
+document.getElementById('btn-calcas').onclick = function() { mostrarCategoria('produtos-calcas'); }
+document.getElementById('btn-acessorios').onclick = function() { mostrarCategoria('produtos-acessorios'); }
+</script>
